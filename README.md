@@ -38,12 +38,12 @@ Once you have installed Composer, it's easy install Facebook Object Debugger CLI
   cd /usr/local
   ```
 
-2.  Create a project for EoC CLI:
+2.  Create a project for Facebook Object Debugger CLI:
   ``` sh
   sudo composer create-project 3f/facebook-od
   ```
   
-3.  For your convenience create a symbolic link for the couch executable in your `/usr/local/bin` directory:
+3.  For your convenience create a symbolic link for the `fbod` executable in your `/usr/local/bin` directory:
   ``` sh
   sudo ln -s /user/local/facebook-od/bin/fbod.php /usr/local/bin/fbod
   ```
@@ -53,17 +53,17 @@ Supported Commands
 ------------------
 Lists commands. 
 ``` sh
-couch list [--xml] [--raw] [--format="..."] [namespace]
+fbod list [--xml] [--raw] [--format="..."] [namespace]
 ```
 
 Displays help for a command. 
 ``` sh
-couch help [--xml] [--format="..."] [--raw] [command_name]
+fbod help [--xml] [--format="..."] [--raw] [command_name]
 ```
 
-Connects to CouchDB server. 
+Fetches new scrape information and update the Facebook cache. 
 ``` sh
-couch refresh [-s|--server[="..."]] user
+fbod refresh [-f|--file[="..."]] [-u|--url[="..."]]
 ```
 
 
