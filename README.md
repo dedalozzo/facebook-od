@@ -63,7 +63,7 @@ fbod help [--xml] [--format="..."] [--raw] [command_name]
 
 Fetches new scrape information and update the Facebook cache. 
 ``` sh
-fbod refresh [-f|--file[="..."]] [-u|--url[="..."]]
+fbod refresh [-i|--file[="..."]] [-u|--url[="..."]]
 ```
 
 
