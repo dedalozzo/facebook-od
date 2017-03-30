@@ -1,8 +1,8 @@
 {
-    "name": "3f/facebook-refresh",
+    "name": "3f/facebook-od",
     "description": "Facebook Open Graph Object Debugger CLI.",
     "keywords": ["facebook", "cache", "refresh", "object", "debugger", "open graph", "debug", "link", "post", "update", "share"],
-    "homepage": "http://github.com/dedalozzo/facebook-refresh",
+    "homepage": "http://github.com/dedalozzo/facebook-od",
     "type": "library",
     "license": "Apache-2.0",
     "authors": [
