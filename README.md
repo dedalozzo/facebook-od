@@ -11,6 +11,8 @@ Facebook Object Debugger CLI
 The Facebook Object Debugger CLI is command-line interface used to refresh the information of any page shared on 
 Facebook. Unfortunately this operation can be 
 
+https://developers.facebook.com/tools/access_token/
+
 
 Composer Installation
 ---------------------
@@ -63,7 +65,9 @@ fbod help [--xml] [--format="..."] [--raw] [command_name]
 
 Fetches new scrape information and update the Facebook cache. 
 ``` sh
-fbod refresh [-i|--file[="..."]] [-u|--url[="..."]]
+fbod refresh [-i|--file[="..."]] [-u|--url[="..."]] 
+  [-d|--id[="..."]] [-s|--secret[="..."]] [-t|--token[="..."]] 
+  [-e|--encode]
 ```
 
 
