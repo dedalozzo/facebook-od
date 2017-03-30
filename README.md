@@ -9,9 +9,8 @@
 Facebook Object Debugger CLI
 ============================
 The Facebook Object Debugger CLI is command-line interface used to refresh the information of any page shared on 
-Facebook. Unfortunately this operation can be 
-
-https://developers.facebook.com/tools/access_token/
+Facebook. Unfortunately this operation can be done manually using the [Facebook Open Graph Object Debugger](https://developers.facebook.com/tools/debug/og/object/).
+To overcome this limitation I have created this command-line interface, using the official [Facebook SDK for PHP](https://github.com/facebook/php-graph-sdk).
 
 
 Composer Installation
@@ -36,17 +35,17 @@ Facebook Object Debugger CLI Installation
 Once you have installed Composer, it's easy install Facebook Object Debugger CLI.
 
 1.  Move into the directory where you prefer install Facebook Object Debugger CLI:
-  ``` sh
+  ```sh
   cd /usr/local
   ```
 
 2.  Create a project for Facebook Object Debugger CLI:
-  ``` sh
+  ```sh
   sudo composer create-project 3f/facebook-od
   ```
   
 3.  For your convenience create a symbolic link for the `fbod` executable in your `/usr/local/bin` directory:
-  ``` sh
+  ```sh
   sudo ln -s /user/local/facebook-od/bin/fbod.php /usr/local/bin/fbod
   ```
 
@@ -54,21 +53,41 @@ Once you have installed Composer, it's easy install Facebook Object Debugger CLI
 Supported Commands
 ------------------
 Lists commands. 
-``` sh
+```sh
 fbod list [--xml] [--raw] [--format="..."] [namespace]
 ```
 
 Displays help for a command. 
-``` sh
+```sh
 fbod help [--xml] [--format="..."] [--raw] [command_name]
 ```
 
 Fetches new scrape information and update the Facebook cache. 
-``` sh
+```sh
 fbod refresh [-i|--file[="..."]] [-u|--url[="..."]] 
   [-d|--id[="..."]] [-s|--secret[="..."]] [-t|--token[="..."]] 
   [-e|--encode]
 ```
+
+
+Usage
+-----
+Using the Facebook Object Debugger CLI is really simple. You can refresh a single URL or a bunch of URLs providing a 
+text file with a list of URLs, one for each line.
+
+```sh
+fbod refresh -u http://www.example.com/foo-bar-123
+```
+
+```sh
+fbod refresh -i urls.txt
+```
+
+You must also provide an **App ID**, an **App Secret** and an **App Access Token** or a **User Access Token**. To see 
+your token please use the [Access Token Tool](https://developers.facebook.com/tools/access_token/). You can use both 
+the App Access Token or the User Access Token, just keep in mind the first one does not expire.
+For your convenience you can rename (or copy) the `config.default.ini` to `config.ini`, then replace the 
+values for your application. Otherwise you can provide those parameters using the designed options from the command-line.
 
 
 Documentation
@@ -78,7 +97,7 @@ The documentation can be generated using [Doxygen](http://doxygen.org). A `Doxyf
 
 Requirements
 ------------
-- PHP 5.6.0 or above.
+- PHP 5.4.0 or above.
 
 
 Authors
