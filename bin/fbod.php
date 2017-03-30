@@ -43,8 +43,12 @@ try {
   $log->pushHandler(new StreamHandler($root.'/log/fbod.log', Logger::DEBUG));
 
   // Creates the application object.
-  $console = new Console('Facebook Object Debugger CLI', Version::getNumber());
+  $console = new Console('Facebook Object Debugger CLI');
   //$console->setCatchExceptions(FALSE);
+
+  // Reads the application's configuration.
+  if ($config = parse_ini_file($root.'/etc/config.ini', TRUE, INI_SCANNER_TYPED))
+    $console->setConfig($config);
 
   $console->add(new Command\RefreshCommand());
 
