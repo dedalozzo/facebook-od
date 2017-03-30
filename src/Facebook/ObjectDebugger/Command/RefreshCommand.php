@@ -17,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 use Facebook\Facebook;
-use Facebook\Exceptions;
 
 
 /**
@@ -68,6 +67,16 @@ class RefreshCommand extends AbstractCommand {
       's',
       InputOption::VALUE_REQUIRED,
       "Facebook secret");
+
+    $this->addOption("token",
+      't',
+      InputOption::VALUE_REQUIRED,
+      "Facebook App|User access token");
+
+    $this->addOption("encode",
+      'e',
+      InputOption::VALUE_NONE,
+      "Encode the provided URL");
   }
 
 
@@ -76,29 +85,19 @@ class RefreshCommand extends AbstractCommand {
    * @param[in] string $url The page URL to scrape.
    */
   private function scrape($url) {
+    $this->output->write($url);
+
     if ($this->input->getOption('encode'))
       $url = urlencode($url);
 
-    try {
-      $params = [
-        'id' => $url,
-        'scrape' => 'true',
-      ];
+    $params = [
+      'id' => $url,
+      'scrape' => 'true'
+    ];
 
-      $response = $this->fb->post('/', $params);
+    $response = $this->fb->post('/', $params);
 
-      $this->output->writeln($response);
-    }
-    catch (Exceptions\FacebookResponseException $e) {
-      // When Graph returns an error
-      echo 'Graph returned an error: ' . $e->getMessage();
-      exit;
-    }
-    catch (Exceptions\FacebookSDKException $e) {
-      // When validation fails or other local issues
-      echo 'Facebook SDK returned an error: ' . $e->getMessage();
-      exit;
-    }
+    $this->output->writeln(' => done');
   }
 
 
@@ -114,8 +113,6 @@ class RefreshCommand extends AbstractCommand {
 
     $config = $this->getApplication()->getConfig();
 
-    //if (array_key_exists('facebook', $config))
-
     if ($input->getOption('id'))
       $appId = $input->getOption('id');
     elseif (array_key_exists('appId', $config))
@@ -130,13 +127,21 @@ class RefreshCommand extends AbstractCommand {
     else
       throw new InvalidOptionException('Facebook Open Graph requires an App Secret.');
 
+    if ($input->getOption('token'))
+      $accessToken = $input->getOption('token');
+    elseif (array_key_exists('appAccessToken', $config))
+      $accessToken = $config['appAccessToken'];
+    else
+      throw new InvalidOptionException('Facebook Open Graph requires an App|User Access Token.');
+
     $this->fb = new Facebook([
       'app_id' => $appId,
       'app_secret' => $appSecret,
+      'default_access_token' => $accessToken,
       'default_graph_version' => 'v2.8',
     ]);
 
-    if ($url = urlencode($input->getOption('url'))) {
+    if ($url = $input->getOption('url')) {
       $this->scrape($url);
     }
     elseif ($fileName = $input->getOption('file')) {
