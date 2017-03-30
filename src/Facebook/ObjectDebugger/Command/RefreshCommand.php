@@ -11,6 +11,7 @@
 namespace Facebook\ObjectDebugger\Command;
 
 
+use Symfony\Component\Console\Exception\InvalidOptionException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -61,12 +62,12 @@ class RefreshCommand extends AbstractCommand {
     $this->addOption("id",
       'd',
       InputOption::VALUE_REQUIRED,
-      "Facebook app id");
+      "Facebook id");
 
     $this->addOption("secret",
       's',
       InputOption::VALUE_REQUIRED,
-      "Facebook app secret");
+      "Facebook secret");
   }
 
 
@@ -111,9 +112,27 @@ class RefreshCommand extends AbstractCommand {
     $this->input = $input;
     $this->output = $output;
 
+    $config = $this->getApplication()->getConfig();
+
+    //if (array_key_exists('facebook', $config))
+
+    if ($input->getOption('id'))
+      $appId = $input->getOption('id');
+    elseif (array_key_exists('appId', $config))
+      $appId = $config['appId'];
+    else
+      throw new InvalidOptionException('Facebook Open Graph requires an App ID.');
+
+    if ($input->getOption('secret'))
+      $appSecret = $input->getOption('secret');
+    elseif (array_key_exists('appSecret', $config))
+      $appSecret = $config['appSecret'];
+    else
+      throw new InvalidOptionException('Facebook Open Graph requires an App Secret.');
+
     $this->fb = new Facebook([
-      'app_id' => '{app-id}',
-      'app_secret' => '{app-secret}',
+      'app_id' => $appId,
+      'app_secret' => $appSecret,
       'default_graph_version' => 'v2.8',
     ]);
 
