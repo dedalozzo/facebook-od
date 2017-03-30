@@ -26,7 +26,7 @@ use Monolog\ErrorHandler;
 use Monolog\Handler\StreamHandler;
 
 
-$start = microtime(true);
+$start = microtime(TRUE);
 
 try {
   $root = realpath(__DIR__."/../");
@@ -47,7 +47,7 @@ try {
   //$console->setCatchExceptions(FALSE);
 
   // Reads the application's configuration.
-  if ($config = parse_ini_file($root.'/etc/config.ini', TRUE, INI_SCANNER_TYPED))
+  if ($config = parse_ini_file($root.'/etc/config.ini'))
     $console->setConfig($config);
 
   $console->add(new Command\RefreshCommand());
