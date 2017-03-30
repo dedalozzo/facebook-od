@@ -26,7 +26,16 @@ class Console extends Application {
   /**
    * @var array $config
    */
-  protected $config;
+  protected $config = [];
+
+
+  /**
+   * @brief Gets the configuration settings.
+   * @return array
+   */
+  public function getConfig() {
+    return $this->config;
+  }
 
 
   /**
