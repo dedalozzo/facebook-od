@@ -8,12 +8,15 @@
  */
 
 
-namespace Facebook\ObjectDebugger\Console\Command;
+namespace Facebook\ObjectDebugger\Command;
 
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+
+use Facebook\Facebook;
+use Facebook\Exceptions;
 
 
 /**
@@ -22,9 +25,24 @@ use Symfony\Component\Console\Input\InputOption;
  */
 class RefreshCommand extends AbstractCommand {
 
+  /**
+   * @var Facebook $fb
+   */
+  private $fb;
 
   /**
-   * @brief Configures the command.
+   * @var InputInterface $input
+   */
+  private $input;
+
+  /**
+   * @var OutputInterface $output
+   */
+  private $output;
+
+
+  /**
+   * @brief Fetches new scrape information and update the Facebook cache.
    */
   protected function configure() {
     $this->setName("refresh");
@@ -39,6 +57,47 @@ class RefreshCommand extends AbstractCommand {
       'u',
       InputOption::VALUE_REQUIRED,
       "URL of a single page to scrape");
+
+    $this->addOption("id",
+      'd',
+      InputOption::VALUE_REQUIRED,
+      "Facebook app id");
+
+    $this->addOption("secret",
+      's',
+      InputOption::VALUE_REQUIRED,
+      "Facebook app secret");
+  }
+
+
+  /**
+   * @brief Scrapes the information.
+   * @param[in] string $url The page URL to scrape.
+   */
+  private function scrape($url) {
+    if ($this->input->getOption('encode'))
+      $url = urlencode($url);
+
+    try {
+      $params = [
+        'id' => $url,
+        'scrape' => 'true',
+      ];
+
+      $response = $this->fb->post('/', $params);
+
+      $this->output->writeln($response);
+    }
+    catch (Exceptions\FacebookResponseException $e) {
+      // When Graph returns an error
+      echo 'Graph returned an error: ' . $e->getMessage();
+      exit;
+    }
+    catch (Exceptions\FacebookSDKException $e) {
+      // When validation fails or other local issues
+      echo 'Facebook SDK returned an error: ' . $e->getMessage();
+      exit;
+    }
   }
 
 
@@ -49,19 +108,26 @@ class RefreshCommand extends AbstractCommand {
    * @retval string
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    if ($fileName = $input->getOption('file')) {
+    $this->input = $input;
+    $this->output = $output;
+
+    $this->fb = new Facebook([
+      'app_id' => '{app-id}',
+      'app_secret' => '{app-secret}',
+      'default_graph_version' => 'v2.8',
+    ]);
+
+    if ($url = urlencode($input->getOption('url'))) {
+      $this->scrape($url);
+    }
+    elseif ($fileName = $input->getOption('file')) {
       $urls = file($fileName, FILE_IGNORE_NEW_LINES);
 
       if ($urls === FALSE)
         throw new \RuntimeException('Cannot open the file.');
 
-      foreach ($urls as $url) {
-        // todo: add code in here
-      }
-    }
-
-    if ($city = urlencode($input->getOption('url'))) {
-      // todo: add code in here
+      foreach ($urls as $url)
+        $this->scrape($url);
     }
   }
 
