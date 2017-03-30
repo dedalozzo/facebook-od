@@ -21,4 +21,20 @@ use Symfony\Component\Console\Application;
  * @brief This class extends the Application class of Symfony framework, with methods aim to set the Phalcon Dependency
  * Injector.
  */
-class Console extends Application {}
+class Console extends Application {
+
+  /**
+   * @var array $config
+   */
+  protected $config;
+
+
+  /**
+   * @brief Provides the configuration settings to the console.
+   * @param[in] array $config An array with the configuration settings.
+   */
+  public function setConfig(array $config) {
+    $this->config = $config;
+  }
+
+}
