@@ -82,7 +82,7 @@ class RefreshCommand extends AbstractCommand {
 
   /**
    * @brief Scrapes the information.
-   * @param[in] string $url The page URL to scrape.
+   * @param string $url The page URL to scrape.
    */
   private function scrape($url) {
     $this->output->write($url);
@@ -103,9 +103,9 @@ class RefreshCommand extends AbstractCommand {
 
   /**
    * @brief Executes the command.
-   * @param[in] InputInterface $input The input interface
-   * @param[in] OutputInterface $output The output interface
-   * @retval string
+   * @param InputInterface $input The input interface
+   * @param OutputInterface $output The output interface
+   * @return string
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $this->input = $input;

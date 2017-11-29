@@ -40,7 +40,7 @@ class Console extends Application {
 
   /**
    * @brief Provides the configuration settings to the console.
-   * @param[in] array $config An array with the configuration settings.
+   * @param array $config An array with the configuration settings.
    */
   public function setConfig(array $config) {
     $this->config = $config;
